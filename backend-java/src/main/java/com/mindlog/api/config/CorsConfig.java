@@ -12,10 +12,13 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                // アプリ内の全てのエンドポイント(/**)に対して適用
                 registry.addMapping("/**")
-                        // Next.jsのポート(3000と3001)からの通信を許可
-                        .allowedOrigins("http://localhost:3000", "http://localhost:3001")
+                        // allowedOrigins ではなく allowedOriginPatterns を使用する
+                        .allowedOriginPatterns(
+                            "http://localhost:3000",
+                            "http://localhost:3001",
+                            "https://*.vercel.app"
+                        )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
