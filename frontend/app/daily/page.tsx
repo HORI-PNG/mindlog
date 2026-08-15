@@ -18,29 +18,30 @@ export default function DailyLogPage() {
 
     try {
       const token = localStorage.getItem("token");
+
       if (!token) {
         throw new Error("ログインしていません。再度ログインしてください。");
       }
 
+      const API_BASE_URL =
+        process.env.NEXT_PUBLIC_API_URL || "https://mindlog-2nj7.onrender.com";
+
       // 日次データをJavaバックエンドへ送信
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/daily-logs`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            date: new Date().toISOString().split("T")[0],
-            studyMinutes: studyHours * 60, // 時間を分に換算
-            focusLevel: Number(focusLevel),
-            sleepHours: Number(sleepHours),
-            caffeineAmount: Number(caffeineAmount),
-            mood: mood,
-          }),
+      const response = await fetch(`${API_BASE_URL}/api/daily-logs`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify({
+          date: new Date().toISOString().split("T")[0],
+          studyMinutes: studyHours * 60,
+          focusLevel: Number(focusLevel),
+          sleepHours: Number(sleepHours),
+          caffeineAmount: Number(caffeineAmount),
+          mood: mood,
+        }),
+      });
 
       if (!response.ok) {
         throw new Error("日次データの保存に失敗しました");
