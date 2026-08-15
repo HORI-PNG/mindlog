@@ -8,6 +8,10 @@ interface ReviewItem {
   recommendedReviewDate: string;
 }
 
+// 本番環境ならRenderのURL、ローカルならlocalhostを使うように設定
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "https://mindlog-2nj7.onrender.com";
+
 export const ReviewNotification: React.FC = () => {
   const [reviews, setReviews] = useState<ReviewItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -16,16 +20,14 @@ export const ReviewNotification: React.FC = () => {
     const fetchReviews = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch(
-          "http://localhost:8080/api/reviews/pending",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: token ? `Bearer ${token}` : "",
-            },
+        // テンプレートリテラルでURLを結合する
+        const response = await fetch(`${API_BASE_URL}/api/reviews/pending`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token ? `Bearer ${token}` : "",
           },
-        );
+        });
 
         if (response.ok) {
           const data: ReviewItem[] = await response.json();

@@ -11,6 +11,10 @@ interface LearningLog {
   focusLevel: number;
 }
 
+// 環境変数からAPIのベースURLを取得（設定されていない場合はローカルの8080を使用）
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080";
+
 export default function DashboardPage() {
   const [labels, setLabels] = useState<string[]>([]);
   const [scores, setScores] = useState<number[]>([]);
@@ -23,8 +27,8 @@ export default function DashboardPage() {
         // LocalStorageなどからJWTトークンを取得
         const token = localStorage.getItem("token");
 
-        // Javaバックエンドの学習ログ取得APIを実行
-        const response = await fetch("http://localhost:8080/api/daily-logs", {
+        // Javaバックエンドの学習ログ取得APIを実行（環境変数を使用）
+        const response = await fetch(`${API_BASE_URL}/api/reviews/pending`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
