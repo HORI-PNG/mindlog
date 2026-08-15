@@ -4,6 +4,10 @@ import { useState } from "react";
 import Card from "@/components/Card";
 import { useRouter } from "next/navigation"; // 画面遷移用
 
+// 環境変数からベースURLを取得（設定されていない場合はローカルの8080を使用）
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080";
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,17 +20,14 @@ export default function Login() {
 
     try {
       // 2章で作成したJavaバックエンドのログインAPIを呼び出す
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/signin`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          // Spring Boot側の要件（UsernamePasswordAuthenticationToken等）に合わせてJSONを送信
-          body: JSON.stringify({ email, password }),
+      const response = await fetch(`${API_BASE_URL}/api/auth/signin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        // Spring Boot側の要件に合わせてJSONを送信
+        body: JSON.stringify({ email, password }),
+      });
 
       if (!response.ok) {
         throw new Error(
