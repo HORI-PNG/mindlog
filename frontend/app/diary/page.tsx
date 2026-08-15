@@ -15,28 +15,27 @@ export default function Diary() {
     setIsAnalyzing(true);
 
     try {
-      // 1. ブラウザに保存されているJWTトークン（VIPパス）を取り出す
       const token = localStorage.getItem("token");
+
       if (!token) {
         throw new Error("ログインしていません。再度ログインしてください。");
       }
 
-      // 2. Javaバックエンド（ポート8080）へPOST送信！
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/diaries`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // ★ここで門番にVIPパスを見せる！
-          },
-          body: JSON.stringify({
-            title: title,
-            content: content,
-            date: new Date().toISOString().split("T")[0], // 今日の日付（YYYY-MM-DD）
-          }),
+      const API_BASE_URL =
+        process.env.NEXT_PUBLIC_API_URL || "https://mindlog-2nj7.onrender.com";
+
+      const response = await fetch(`${API_BASE_URL}/api/diaries`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify({
+          title: title,
+          content: content,
+          date: new Date().toISOString().split("T")[0],
+        }),
+      });
 
       if (!response.ok) {
         throw new Error("日記の保存に失敗しました");
