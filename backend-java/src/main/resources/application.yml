@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: backend-java
+  datasource:
+    # DB_HOSTの指定があればそれを使い、無ければ localhost を使うという魔法の記法です
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/mindlog_db
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+app:
+  jwt:
+    # 署名用のシークレットキー（必ず32文字以上のランダムな文字列にしてください）
+    secret: MindLogAi-Super-Secret-Key-For-Jwt-Authentication-2026
+    # トークンの有効期限（ミリ秒）: 86400000 = 24時間
+    expiration-ms: 86400000

@@ -1,0 +1,54 @@
+services:
+  # データベース (PostgreSQL)
+  db:
+    image: postgres:15-alpine
+    container_name: mindlog_db
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: mindlog_db
+      TZ: "Asia/Tokyo"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # フロントエンド (Next.js 待機用)
+  frontend:
+    image: node:18-alpine
+    container_name: mindlog_frontend
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    command: sh -c "echo 'Next.js environment ready.' && tail -f /dev/null"
+
+  # バックエンド (Java/Spring Boot 待機用)
+  backend-java:
+    image: eclipse-temurin:25-jdk-alpine
+    container_name: mindlog_java_api
+    working_dir: /app
+    volumes:
+      - ./backend-java:/app
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=db
+    command: ./gradlew bootRun
+
+  # AI/MLバックエンド (Python/FastAPI 待機用)
+  backend-python:
+    image: python:3.9-slim
+    container_name: mindlog_python_api
+    working_dir: /app
+    volumes:
+      - ./backend-python:/app
+    ports:
+      - "8000:8000"
+    command: sh -c "echo 'Python AI environment ready.' && tail -f /dev/null"
+
+volumes:
+  pgdata:
