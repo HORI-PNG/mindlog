@@ -9,7 +9,7 @@ export default function Diary() {
   const [content, setContent] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
-  // ★本物のAPI通信処理
+  // 本物のAPI通信処理
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsAnalyzing(true);

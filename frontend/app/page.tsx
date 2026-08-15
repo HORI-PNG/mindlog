@@ -14,22 +14,23 @@ export default function Dashboard() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
+
         if (!token) {
           throw new Error(
             "ログインしていません。ログイン画面からやり直してください。",
           );
         }
 
-        // Javaバックエンドから日記の一覧を取得
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/diaries`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const API_BASE_URL =
+          process.env.NEXT_PUBLIC_API_URL ||
+          "https://mindlog-2nj7.onrender.com";
+
+        const response = await fetch(`${API_BASE_URL}/api/diaries`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
 
         if (!response.ok) {
           throw new Error("データの取得に失敗しました");
