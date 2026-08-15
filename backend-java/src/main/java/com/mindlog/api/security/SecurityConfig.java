@@ -65,17 +65,32 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // 👇 これを追加！Spring Security専用の確実なCORS許可設定
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Next.jsからのアクセスを許可
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    
+        configuration.setAllowedOriginPatterns(Arrays.asList(
+            "http://localhost:3000",
+            "http://localhost:3001",
+            "https://*.vercel.app"
+        ));
+    
+        configuration.setAllowedMethods(Arrays.asList(
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+            "OPTIONS"
+        ));
+    
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    
+        UrlBasedCorsConfigurationSource source =
+            new UrlBasedCorsConfigurationSource();
+    
         source.registerCorsConfiguration("/**", configuration);
+    
         return source;
     }
 }
