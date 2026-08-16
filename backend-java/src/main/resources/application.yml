@@ -3,9 +3,9 @@ spring:
     name: backend-java
   datasource:
     # DB_HOSTの指定があればそれを使い、無ければ localhost を使うという魔法の記法です
-    url: jdbc:postgresql://db.ncvefvsnfwfmqwgijnsv.supabase.co:5432/postgres
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
