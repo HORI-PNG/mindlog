@@ -44,8 +44,13 @@ export default function Diary() {
       alert("データベースへの保存が完了しました！ ✨");
       setTitle("");
       setContent("");
-    } catch (err: any) {
-      alert(err.message);
+    } catch (err: unknown) {
+      // ★ 修正: any を unknown に変更し、Errorオブジェクトか判定
+      if (err instanceof Error) {
+        alert(err.message);
+      } else {
+        alert("予期せぬエラーが発生しました");
+      }
     } finally {
       setIsAnalyzing(false);
     }

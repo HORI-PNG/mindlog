@@ -1,74 +1,58 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { ConcentrationChart } from "../../components/ConcentrationChart";
 import { ReviewNotification } from "../../components/ReviewNotification";
+import useSWR from "swr"; //
 
-// Java APIから返ってくる学習ログの型定義
 interface LearningLog {
   id: string;
   date: string;
   focusLevel: number;
 }
 
-// 環境変数からAPIのベースURLを取得（設定されていない場合はローカルの8080を使用）
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080";
 
+// ★ fetcher関数を定義
+const fetcher = async (url: string) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token ? `Bearer ${token}` : "",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("データの取得に失敗しました");
+  }
+  return response.json();
+};
+
 export default function DashboardPage() {
-  const [labels, setLabels] = useState<string[]>([]);
-  const [scores, setScores] = useState<number[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  // ★ useEffectや複数のuseStateを削除し、useSWRで一元管理
+  const { data, error, isLoading } = useSWR<LearningLog[]>(
+    `${API_BASE_URL}/api/reviews/pending`,
+    fetcher,
+  );
 
-  useEffect(() => {
-    const fetchConcentrationData = async () => {
-      try {
-        // LocalStorageなどからJWTトークンを取得
-        const token = localStorage.getItem("token");
+  // ★ 取得したデータをグラフ用にフォーマットする処理（データが存在する場合のみ実行）
+  let labels: string[] = [];
+  let scores: number[] = [];
 
-        // Javaバックエンドの学習ログ取得APIを実行（環境変数を使用）
-        const response = await fetch(`${API_BASE_URL}/api/reviews/pending`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token ? `Bearer ${token}` : "",
-          },
-        });
+  if (data) {
+    const sortedData = [...data].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+    );
+    const recentLogs = sortedData.slice(-7);
 
-        if (!response.ok) {
-          throw new Error("データの取得に失敗しました");
-        }
-
-        const data: LearningLog[] = await response.json();
-
-        // 昇順（古い日付 → 新しい日付）にソート
-        const sortedData = data.sort(
-          (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-        );
-
-        // 過去7件分を抽出
-        const recentLogs = sortedData.slice(-7);
-
-        // Chart.js用に日付とスコアの配列を生成
-        const formattedLabels = recentLogs.map((log) => {
-          const d = new Date(log.date);
-          return `${d.getMonth() + 1}/${d.getDate()}`;
-        });
-        const formattedScores = recentLogs.map((log) => log.focusLevel);
-
-        setLabels(formattedLabels);
-        setScores(formattedScores);
-      } catch (err) {
-        console.error(err);
-        setError("データの読み込み中にエラーが発生しました。");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchConcentrationData();
-  }, []);
+    labels = recentLogs.map((log) => {
+      const d = new Date(log.date);
+      return `${d.getMonth() + 1}/${d.getDate()}`;
+    });
+    scores = recentLogs.map((log) => log.focusLevel);
+  }
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -76,17 +60,17 @@ export default function DashboardPage() {
         MindLog ダッシュボード
       </h1>
 
-      {/* 👇 追加：復習通知バナー（グラフの上に表示） */}
       <ReviewNotification />
 
-      {/* グラフを表示するカード */}
       <div className="bg-white p-6 rounded-xl shadow-md max-w-3xl mt-6">
-        {loading ? (
+        {isLoading ? (
           <p className="text-gray-500 text-center py-10">
             データを読み込み中...
           </p>
         ) : error ? (
-          <p className="text-red-500 text-center py-10">{error}</p>
+          <p className="text-red-500 text-center py-10">
+            {error.message || "エラーが発生しました。"}
+          </p>
         ) : labels.length === 0 ? (
           <p className="text-gray-400 text-center py-10">
             記録データがまだありません。

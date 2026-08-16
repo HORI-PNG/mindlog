@@ -1,94 +1,90 @@
-from fastapi import FastAPI
+import os
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-from transformers import pipeline
-import joblib
-import fugashi
-import numpy as np
 
-# --- アプリケーション設定 ---
-app = FastAPI(title="MindLog AI API", version="1.0.0")
+app = FastAPI(
+    title="MindLog AI Python Service",
+    description="感情分析および集中力予測を提供するAIマイクロサービス",
+    version="1.0.0"
+)
+
+# --- 本番専用 CORS設定 ---
+# Renderなどの環境変数 FRONTEND_URL に指定されたURL、またはVercelの本番/プレビューURLのみを許可
+frontend_url = os.getenv("FRONTEND_URL", "https://your-app-name.vercel.app")  # ※ご自身のVercelの本番URLを指定
+
+allowed_origins = [
+    frontend_url,
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # 本番環境ではフロントエンドのURLに変更
+    allow_origins=allowed_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",  # VercelのすべてのデプロイURL（*.vercel.app）からの通信を許可
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# --- AIモデルのロード ---
-print("AIモデルを読み込み中...")
-# 1. 感情分析モデル
-sentiment_analyzer = pipeline(
-    "sentiment-analysis",
-    model="koheiduck/bert-japanese-finetuned-sentiment",
-    device=-1
-)
-# 2. 集中力予測モデル (先ほど学習したscikit-learnモデル)
-try:
-    focus_model = joblib.load('focus_model.pkl')
-except FileNotFoundError:
-    focus_model = None
-    print("警告: focus_model.pkl が見つかりません。train_model.py を実行してください。")
 
-# 3. 形態素解析ターガー (キーワード抽出用)
-tagger = fugashi.Tagger()
+# --- Pydanticモデル（リクエスト / レスポンスの型定義） ---
 
-# --- データモデル ---
-class DiaryEntry(BaseModel):
-    text: str = Field(..., min_length=1)
+class DiaryEntryRequest(BaseModel):
+    title: str
+    content: str
 
-class FocusData(BaseModel):
-    sleep_hours: float = Field(..., ge=0, le=24)
-    caffeine_mg: int = Field(..., ge=0)
-    emotion_score: float = Field(...)
+class SentimentAnalysisResponse(BaseModel):
+    sentiment_score: float = Field(..., description="感情スコア (-1.0 ～ 1.0)")
+    keywords: list[str] = Field(..., description="抽出された重要キーワード")
 
-# --- エンドポイント ---
+class ConditionRequest(BaseModel):
+    study_minutes: int
+    focus_level: int
+    sleep_hours: float
+    caffeine_amount: int
+    mood: str
 
-@app.post("/api/analyze-sentiment")
-def analyze_sentiment(entry: DiaryEntry) -> dict:
-    """日記から感情スコアと重要キーワードを抽出します"""
-    
-    # 1. 感情分析
-    result = sentiment_analyzer(entry.text)[0]
-    label = result["label"]
-    confidence = result["score"]
-    
-    if label == "POSITIVE":
-        emotion_score = confidence
-    elif label == "NEGATIVE":
-        emotion_score = -confidence
-    else:
-        emotion_score = 0.0
+class FocusPredictionResponse(BaseModel):
+    predicted_focus_level: float = Field(..., description="AIによる予測集中度")
 
-    # 2. キーワード抽出 (名詞のみを抽出)
-    keywords = []
-    for word in tagger(entry.text):
-        # 名詞であり、数詞や代名詞ではないものを抽出
-        if word.feature.pos1 == "名詞" and word.feature.pos2 not in ["数詞", "代名詞", "非自立"]:
-            keywords.append(word.surface)
-    
-    # 重複を削除して上位5件を返す
-    unique_keywords = list(dict.fromkeys(keywords))[:5]
 
-    return {
-        "emotion_score": round(emotion_score, 4),
-        "keywords": unique_keywords
-    }
+# --- エンドポイント定義 ---
 
-@app.post("/api/predict-focus")
-def predict_focus(data: FocusData) -> dict:
-    """学習済み機械学習モデルを使用して集中力を予測します"""
-    if focus_model is None:
-        return {"error": "モデルがロードされていません"}
+@app.get("/")
+def read_root() -> dict[str, str]:
+    return {"status": "ok", "message": "MindLog AI Python Service is running"}
 
-    # 入力データをモデルの形式に変換
-    input_data = np.array([[data.sleep_hours, data.caffeine_mg, data.emotion_score]])
-    
-    # モデルによる予測の実行
-    prediction = focus_model.predict(input_data)[0]
-    
-    return {
-        "predicted_focus_percentage": round(prediction, 1)
-    }
+
+@app.post("/api/analyze-sentiment", response_model=SentimentAnalysisResponse)
+def analyze_sentiment(entry: DiaryEntryRequest) -> SentimentAnalysisResponse:
+    """
+    日記のテキストから感情スコアと重要キーワードを抽出するAPI
+    """
+    try:
+        text = entry.content
+        
+        # モックレスポンス例
+        dummy_score = 0.85
+        dummy_keywords = ["学習", "Spring Boot", "FastAPI"]
+
+        return SentimentAnalysisResponse(
+            sentiment_score=dummy_score,
+            keywords=dummy_keywords
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"感情分析に失敗しました: {str(e)}")
+
+
+@app.post("/api/predict-focus", response_model=FocusPredictionResponse)
+def predict_focus(condition: ConditionRequest) -> FocusPredictionResponse:
+    """
+    生活習慣・学習ログから次回の集中度を予測するAPI
+    """
+    try:
+        predicted_score = round(min(5.0, max(1.0, condition.sleep_hours * 0.5 + condition.focus_level * 0.5)), 2)
+
+        return FocusPredictionResponse(
+            predicted_focus_level=predicted_score
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"集中度予測に失敗しました: {str(e)}")

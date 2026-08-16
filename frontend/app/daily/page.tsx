@@ -47,9 +47,13 @@ export default function DailyLogPage() {
         throw new Error("日次データの保存に失敗しました");
       }
 
-      alert("本日のコンディションを保存しました！ ✨");
-    } catch (err: any) {
-      alert(err.message);
+      alert("本日のコンディションを保存しました");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        alert(err.message);
+      } else {
+        alert("予期せぬエラーが発生しました");
+      }
     } finally {
       setIsSubmitting(false);
     }

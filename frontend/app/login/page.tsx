@@ -42,8 +42,13 @@ export default function Login() {
 
       alert("ログイン成功！ダッシュボードに移動します。");
       router.push("/"); // トップページへリダイレクト
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      // ▼ err が Error クラスのインスタンスかどうかを確認してから .message を使う
+      if (err instanceof Error) {
+        alert(err.message);
+      } else {
+        alert("予期せぬエラーが発生しました");
+      }
     }
   };
 
