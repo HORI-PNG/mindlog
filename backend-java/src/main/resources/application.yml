@@ -19,6 +19,6 @@ spring:
 app:
   jwt:
     # 署名用のシークレットキー（必ず32文字以上のランダムな文字列にしてください）
-    secret: MindLogAi-Super-Secret-Key-For-Jwt-Authentication-2026
+    secret: ${JWT_SECRET}
     # トークンの有効期限（ミリ秒）: 86400000 = 24時間
     expiration-ms: 86400000
