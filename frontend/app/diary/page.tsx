@@ -45,7 +45,7 @@ export default function Diary() {
       setTitle("");
       setContent("");
     } catch (err: unknown) {
-      // ★ 修正: any を unknown に変更し、Errorオブジェクトか判定
+      // any を unknown に変更し、Errorオブジェクトか判定
       if (err instanceof Error) {
         alert(err.message);
       } else {
@@ -116,7 +116,7 @@ export default function Diary() {
                   : "bg-gradient-to-r from-sky-400 to-blue-500 hover:from-sky-500 hover:to-blue-600 text-white hover:shadow-lg"
               }`}
             >
-              {isAnalyzing ? "保存中..." : "保存してAIの分析を受ける ✨"}
+              {isAnalyzing ? "保存中..." : "保存してAIの分析を受ける"}
             </button>
           </div>
         </form>

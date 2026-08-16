@@ -13,7 +13,7 @@ interface LearningLog {
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "https://mindlog-2nj7.onrender.com";
 
-// ★ fetcher関数を定義
+// fetcher関数を定義
 const fetcher = async (url: string) => {
   const token = localStorage.getItem("token");
   const response = await fetch(url, {
@@ -31,13 +31,13 @@ const fetcher = async (url: string) => {
 };
 
 export default function DashboardPage() {
-  // ★ useEffectや複数のuseStateを削除し、useSWRで一元管理
+  // useEffectや複数のuseStateを削除し、useSWRで一元管理
   const { data, error, isLoading } = useSWR<LearningLog[]>(
     `${API_BASE_URL}/api/reviews/pending`,
     fetcher,
   );
 
-  // ★ 取得したデータをグラフ用にフォーマットする処理（データが存在する場合のみ実行）
+  // 取得したデータをグラフ用にフォーマットする処理（データが存在する場合のみ実行）
   let labels: string[] = [];
   let scores: number[] = [];
 

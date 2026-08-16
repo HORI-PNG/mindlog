@@ -22,7 +22,7 @@ public class DiaryService {
     private final DiaryRepository diaryRepository;
     private final UserRepository userRepository;
     
-    // Lombokの @RequiredArgsConstructor により自動でDI（注入）されます
+    // Lombokの @RequiredArgsConstructor により自動でDI（注入）される
     private final RestTemplate restTemplate;
 
     // Python APIのURL

@@ -40,7 +40,7 @@ public class DailyLogService {
         return dailyLogRepository.save(dailyLog);
     }
 
-    // ログイン中のユーザーの全ログを取得（将来グラフ表示などに使います）
+    // ログイン中のユーザーの全ログを取得（将来グラフ表示などに使う）
     public List<DailyLog> getAllLogs(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("ユーザーが見つかりません"));

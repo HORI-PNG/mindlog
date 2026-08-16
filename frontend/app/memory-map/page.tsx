@@ -71,7 +71,7 @@ export default function MemoryMapPage() {
     <main className="min-h-screen bg-slate-50">
       <div className="max-w-5xl mx-auto p-6 space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">🗺️ 思い出マップ</h1>
+          <h1 className="text-2xl font-bold text-gray-800">思い出マップ</h1>
           <p className="text-gray-500 text-sm mt-1">
             AIが抽出したキーワードや検索で過去の体験・学びを俯瞰できます。
           </p>
@@ -97,7 +97,7 @@ export default function MemoryMapPage() {
         </div>
 
         {/* AIキーワードクラウド */}
-        <Card title="🏷️ AI抽出キーワードクラウド">
+        <Card title="AI抽出キーワードクラウド">
           {allKeywords.length > 0 ? (
             <div className="flex flex-wrap gap-2">
               {allKeywords.map((tag) => (

@@ -18,14 +18,14 @@ public class CorsConfig {
         
         config.setAllowCredentials(true);
         
-        // Arrays.asList() を List.of() に変更（Java 17推奨の書き方）
+        // Arrays.asList() を List.of() に
         config.setAllowedOriginPatterns(List.of(
                 "https://*.vercel.app",           
                 "https://mindlog-two.vercel.app", 
                 "https://mindlog-2nj7.onrender.com"
         ));
         
-        // ★修正: 同様に List.of() を使用
+        // List.of() を使用
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         

@@ -11,8 +11,8 @@ import java.util.UUID;
 public class ReviewService {
 
     public List<ReviewResponseDto> getPendingReviews(String email) {
-        // ※本来はここでデータベースを検索し、復習タイミングが今日に該当する日記やログを取得します。
-        // 今回は連携テストのため、ダミーの復習データを2件返します。
+        // ※本来はここでデータベースを検索し、復習タイミングが今日に該当する日記やログを取得する
+        // 今回は連携テストのため、ダミーの復習データを2件返す
         return List.of(
             new ReviewResponseDto(
                 UUID.randomUUID().toString(), 

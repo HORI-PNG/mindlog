@@ -10,7 +10,7 @@ export default function LearningLog() {
   const [concentration, setConcentration] = useState<number>(3);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
 
-  // フォーム送信処理（後ほどAPIと連携させます）
+  // フォーム送信処理（後ほどAPIと連携させる）
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     alert(

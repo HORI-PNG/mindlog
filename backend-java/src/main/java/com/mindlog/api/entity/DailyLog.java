@@ -24,7 +24,7 @@ public class DailyLog {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    // ★重要: この記録が「どのユーザーのものか」を紐づける設定です
+    // この記録が「どのユーザーのものか」を紐づける設定
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

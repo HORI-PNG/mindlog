@@ -2,7 +2,7 @@ spring:
   application:
     name: backend-java
   datasource:
-    # DB_HOSTの指定があればそれを使い、無ければ localhost を使うという魔法の記法です
+    # DB_HOSTの指定があればそれを使い、無ければ localhost を使うという記法
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
@@ -18,7 +18,7 @@ spring:
 
 app:
   jwt:
-    # 署名用のシークレットキー（必ず32文字以上のランダムな文字列にしてください）
+    # 署名用のシークレットキー
     secret: ${JWT_SECRET}
     # トークンの有効期限（ミリ秒）: 86400000 = 24時間
     expiration-ms: 86400000

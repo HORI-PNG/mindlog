@@ -41,11 +41,11 @@ public class Diary {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    // AI感情分析スコア（-1.0〜+1.0 など。フェーズ4のPython連携で使用します）
+    // AI感情分析スコア（-1.0〜+1.0 など。フェーズ4のPython連携で使用）
     @Column(name = "sentiment_score")
     private Double sentimentScore;
 
-    // AI抽出キーワード（カンマ区切りテキストなど。フェーズ4で使用します）
+    // AI抽出キーワード（カンマ区切りテキストなど。フェーズ4で使用）
     private String keywords;
 
     @CreationTimestamp

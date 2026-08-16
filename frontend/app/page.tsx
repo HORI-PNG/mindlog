@@ -67,7 +67,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         <Link href="/diary">
           <div className="p-6 bg-gradient-to-r from-sky-400 to-blue-500 text-white rounded-2xl shadow-md hover:shadow-lg transition-all cursor-pointer">
-            <h2 className="text-xl font-bold">📝 今日の一言日記を書く</h2>
+            <h2 className="text-xl font-bold">今日の一言日記を書く</h2>
             <p className="text-sm opacity-90 mt-1">
               思考や感情を言葉にしてAIに分析してもらいましょう
             </p>
@@ -76,7 +76,7 @@ export default function Dashboard() {
 
         <Link href="/daily">
           <div className="p-6 bg-gradient-to-r from-indigo-400 to-purple-500 text-white rounded-2xl shadow-md hover:shadow-lg transition-all cursor-pointer">
-            <h2 className="text-xl font-bold">📊 コンディションを記録する</h2>
+            <h2 className="text-xl font-bold">コンディションを記録する</h2>
             <p className="text-sm opacity-90 mt-1">
               学習時間、集中度、生活習慣をトラッキング
             </p>

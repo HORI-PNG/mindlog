@@ -76,7 +76,7 @@ export default function CalendarPage() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold text-gray-800">
-              📅 カレンダー振り返り
+              カレンダー振り返り
             </h1>
             <p className="text-gray-500 text-sm mt-1">
               指定した日付のデータと日記を振り返ることができます。
@@ -96,7 +96,7 @@ export default function CalendarPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* コンディション・学習ログ */}
-            <Card title={`📊 ${selectedDate} のコンディション`}>
+            <Card title={`${selectedDate} のコンディション`}>
               {selectedLog ? (
                 <div className="space-y-4 text-sm">
                   <div className="flex justify-between border-b pb-2">
@@ -133,7 +133,7 @@ export default function CalendarPage() {
             </Card>
 
             {/* 日記・AI分析 */}
-            <Card title={`📖 ${selectedDate} の日記 & AIインサイト`}>
+            <Card title={`${selectedDate} の日記 & AIインサイト`}>
               {selectedDiary ? (
                 <div className="space-y-4">
                   <h3 className="text-lg font-bold text-gray-800">

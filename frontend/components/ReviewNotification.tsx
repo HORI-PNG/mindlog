@@ -8,7 +8,6 @@ interface ReviewItem {
   recommendedReviewDate: string;
 }
 
-// 本番環境ならRenderのURL、ローカルならlocalhostを使うように設定
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://mindlog-2nj7.onrender.com";
 
@@ -52,7 +51,7 @@ export const ReviewNotification: React.FC = () => {
       <div className="flex items-center">
         <div className="ml-3">
           <p className="text-sm font-medium text-amber-800">
-            🧠 忘却曲線に基づく復習のタイミングです！ ({reviews.length}
+            忘却曲線に基づく復習のタイミングです！ ({reviews.length}
             件のアイテム)
           </p>
           <ul className="mt-2 text-sm text-amber-700 list-disc list-inside">

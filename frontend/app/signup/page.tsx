@@ -5,7 +5,7 @@ import Card from "@/components/Card";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-// 先ほど統一したAPIのベースURLを使用します
+// 先ほど統一したAPIのベースURLを使用
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "https://mindlog-2nj7.onrender.com";
 
@@ -39,7 +39,7 @@ export default function SignUp() {
       }
 
       // 登録成功時
-      alert("ユーザー登録が完了しました！🎉 ログイン画面に移動します。");
+      alert("ユーザー登録が完了しました！ログイン画面に移動します。");
       router.push("/login"); // ログイン画面へリダイレクト
     } catch (err: unknown) {
       if (err instanceof Error) {

@@ -29,7 +29,7 @@ public class AuthService {
 
         User user = User.builder()
                 .email(request.getEmail())
-                // 受け取った生のパスワードをBCryptで強力に暗号化してから保存します
+                // 受け取った生のパスワードをBCryptで強力に暗号化してから保存
                 .password(passwordEncoder.encode(request.getPassword()))
                 .username(request.getUsername())
                 .build();
@@ -39,7 +39,7 @@ public class AuthService {
 
     // ログイン処理
     public JwtResponse login(SignInRequest request) {
-        // 1. パスワードが正しいかチェック（間違っていればここで自動的にエラー弾きになります）
+        // 1. パスワードが正しいかチェック
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );

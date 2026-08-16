@@ -15,14 +15,14 @@ public class CustomUserDetails implements UserDetails {
         this.user = user;
     }
 
-    // 作成したUserエンティティを取得できるようにしておきます
+    // 作成したUserエンティティを取得できるように
     public User getUser() {
         return user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // 今回は複雑な権限（Admin/Userなど）は設けないため、空のリストを返します
+        // 今回は複雑な権限（Admin/Userなど）は設けないため、空のリストを返す
         return List.of();
     }
 
@@ -33,7 +33,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getEmail(); // MindLog AIではEメールをID（Username）として扱います
+        return user.getEmail(); // MindLog AIではEメールをID（Username）として扱う
     }
 
     @Override

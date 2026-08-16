@@ -5,7 +5,7 @@ import Card from "@/components/Card";
 import { useRouter } from "next/navigation"; // 画面遷移用
 import Link from "next/link";
 
-// 環境変数からベースURLを取得（設定されていない場合はローカルの8080を使用）
+// 環境変数からベースURLを取得
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "https://mindlog-2nj7.onrender.com";
 
@@ -39,7 +39,7 @@ export default function Login() {
       const data = await response.json();
 
       // 成功したら、取得したJWTトークンをブラウザのローカルストレージに保存
-      localStorage.setItem("token", data.token); // ※APIのレスポンス形式に合わせてdata.token部分は調整が必要な場合があります
+      localStorage.setItem("token", data.token);
 
       alert("ログイン成功！ダッシュボードに移動します。");
       router.push("/"); // トップページへリダイレクト
