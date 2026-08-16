@@ -31,8 +31,8 @@ export default function CalendarPage() {
   const [dailyLogs, setDailyLogs] = useState<DailyLog[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const API_BASE =
-    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080";
+  const API_BASE_URL =
+    process.env.NEXT_PUBLIC_API_URL || "https://mindlog-2nj7.onrender.com";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,8 +45,8 @@ export default function CalendarPage() {
 
       try {
         const [diaryRes, logRes] = await Promise.all([
-          fetch(`${API_BASE}/api/diaries`, { headers }),
-          fetch(`${API_BASE}/api/daily-logs`, { headers }),
+          fetch(`${API_BASE_URL}/api/diaries`, { headers }),
+          fetch(`${API_BASE_URL}/api/daily-logs`, { headers }),
         ]);
 
         if (diaryRes.ok) {
@@ -65,7 +65,7 @@ export default function CalendarPage() {
     };
 
     fetchData();
-  }, [API_BASE]);
+  }, [API_BASE_URL]);
 
   // 選択された日付のデータをフィルタリング
   const selectedDiary = diaries.find((d) => d.date === selectedDate);

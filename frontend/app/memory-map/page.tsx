@@ -20,14 +20,14 @@ export default function MemoryMapPage() {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const API_BASE =
-    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080";
+  const API_BASE_URL =
+    process.env.NEXT_PUBLIC_API_URL || "https://mindlog-2nj7.onrender.com";
 
   useEffect(() => {
     const fetchDiaries = async () => {
       const token = localStorage.getItem("token");
       try {
-        const res = await fetch(`${API_BASE}/api/diaries`, {
+        const res = await fetch(`${API_BASE_URL}/api/diaries`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: token ? `Bearer ${token}` : "",
@@ -45,7 +45,7 @@ export default function MemoryMapPage() {
     };
 
     fetchDiaries();
-  }, [API_BASE]);
+  }, [API_BASE_URL]);
 
   // すべての抽出キーワードを収集・整理
   const allKeywords = Array.from(
