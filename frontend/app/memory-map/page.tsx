@@ -2,7 +2,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Header from "@/components/Header";
 import Card from "@/components/Card";
 
 interface Diary {
@@ -70,8 +69,6 @@ export default function MemoryMapPage() {
 
   return (
     <main className="min-h-screen bg-slate-50">
-      <Header />
-
       <div className="max-w-5xl mx-auto p-6 space-y-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">🗺️ 思い出マップ</h1>
