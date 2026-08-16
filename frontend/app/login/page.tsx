@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Card from "@/components/Card";
 import { useRouter } from "next/navigation"; // 画面遷移用
+import Link from "next/link";
 
 // 環境変数からベースURLを取得（設定されていない場合はローカルの8080を使用）
 const API_BASE_URL =
@@ -96,6 +97,18 @@ export default function Login() {
           >
             ログイン
           </button>
+
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-600">
+              アカウントを持っていませんか？{" "}
+              <Link
+                href="/signup"
+                className="text-emerald-500 hover:underline font-bold"
+              >
+                新規登録はこちら
+              </Link>
+            </p>
+          </div>
         </form>
       </Card>
     </main>
