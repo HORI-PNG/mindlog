@@ -11,7 +11,7 @@ app = FastAPI(
 
 # --- 本番専用 CORS設定 ---
 # Renderなどの環境変数 FRONTEND_URL に指定されたURL、またはVercelの本番/プレビューURLのみを許可
-frontend_url = os.getenv("FRONTEND_URL", "https://your-app-name.vercel.app")  # ※ご自身のVercelの本番URLを指定
+frontend_url = os.getenv("FRONTEND_URL", "https://mindlog-two.vercel.app")
 
 allowed_origins = [
     frontend_url,

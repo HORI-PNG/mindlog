@@ -11,7 +11,7 @@ interface LearningLog {
 }
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080";
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://mindlog-2nj7.onrender.com";
 
 // ★ fetcher関数を定義
 const fetcher = async (url: string) => {

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"; // 画面遷移用
 
 // 環境変数からベースURLを取得（設定されていない場合はローカルの8080を使用）
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080";
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://mindlog-2nj7.onrender.com";
 
 export default function Login() {
   const [email, setEmail] = useState("");

@@ -20,9 +20,9 @@ public class CorsConfig {
         
         // Arrays.asList() を List.of() に変更（Java 17推奨の書き方）
         config.setAllowedOriginPatterns(List.of(
-                "http://localhost:3000",
-                "https://*.vercel.app",   // 本番のフロントエンドURL用
-                "https://*.onrender.com"  // 本番のバックエンドURL用
+                "https://*.vercel.app",           
+                "https://mindlog-two.vercel.app", 
+                "https://mindlog-2nj7.onrender.com"
         ));
         
         // ★修正: 同様に List.of() を使用
